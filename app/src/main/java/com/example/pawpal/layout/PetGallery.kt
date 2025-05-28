@@ -1,6 +1,7 @@
 package com.example.pawpal.layout
 
 import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat.WEBP_LOSSY
 import android.graphics.BitmapFactory
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -305,9 +306,9 @@ fun PetGallery(userId: String?, pets: List<Map<String, Any>>, onPetsUpdated: () 
                             if (imageBitmap != null) {
                                 val baos = ByteArrayOutputStream()
                                 val bitmap = imageBitmapToAndroidBitmap(imageBitmap!!, 1024, 1024)
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+                                bitmap.compress(WEBP_LOSSY, 80, baos)
                                 val imageData = baos.toByteArray()
-                                val imageRef = storage.reference.child("users/$userId/pets/$petId.jpg")
+                                val imageRef = storage.reference.child("users/$userId/pets/$petId.webp")
                                 imageRef.putBytes(imageData).await()
                                 uploadedUrl = imageRef.downloadUrl.await().toString()
                             }
@@ -499,9 +500,9 @@ fun PetGallery(userId: String?, pets: List<Map<String, Any>>, onPetsUpdated: () 
                             if (imageBitmap != null) {
                                 val baos = ByteArrayOutputStream()
                                 val bitmap = imageBitmapToAndroidBitmap(imageBitmap!!, 640, 640)
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+                                bitmap.compress(WEBP_LOSSY, 80, baos)
                                 val imageData = baos.toByteArray()
-                                val imageRef = storage.reference.child("users/$userId/pets/${pet["id"]}.jpg")
+                                val imageRef = storage.reference.child("users/$userId/pets/${pet["id"]}.webp")
                                 imageRef.putBytes(imageData).await()
                                 uploadedUrl = imageRef.downloadUrl.await().toString()
                             }

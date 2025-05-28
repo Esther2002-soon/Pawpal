@@ -286,10 +286,10 @@ fun SettingScreen(navController: NavController) {
                                     if (imageBitmap != null) {
                                         val baos = ByteArrayOutputStream()
                                         val bitmap = imageBitmapToAndroidBitmap(imageBitmap!!, 640, 640)
-                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+                                        bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 80, baos)
                                         val imageData = baos.toByteArray()
 
-                                        val imagePath = "profile_images/$userId.jpg"
+                                        val imagePath = "profile_images/$userId.webp"
                                         val imageRef = storage.reference.child(imagePath)
 
                                         imageRef.putBytes(imageData)

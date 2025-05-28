@@ -101,7 +101,7 @@ fun ProfileScreen(navController: NavController) {
 
             val resized = imageBitmapToAndroidBitmap(bmp.asImageBitmap(), 640, 640)
             val baos = java.io.ByteArrayOutputStream()
-            resized.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+            resized.compress(Bitmap.CompressFormat.WEBP_LOSSY, 80, baos)
             val compressedBytes = baos.toByteArray()
 
             backgroundRef.putBytes(compressedBytes)

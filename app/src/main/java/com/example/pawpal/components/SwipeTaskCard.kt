@@ -72,7 +72,7 @@ fun SwipeTaskCard(
                 val url = doc.getString("imageUrl")
                 if (!url.isNullOrEmpty()) {
                     val ref = FirebaseStorage.getInstance().getReferenceFromUrl(url)
-                    val bytes = ref.getBytes(100 * 1024).await()
+                    val bytes = ref.getBytes(1024 * 1024).await()
                     ownerImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.size).asImageBitmap()
                 }
             } catch (e: Exception) {

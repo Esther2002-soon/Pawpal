@@ -99,8 +99,6 @@ fun ChatScreen(
                 val stream = context.contentResolver.openInputStream(uri)
                 val bitmap = BitmapFactory.decodeStream(stream)
 
-                // Resize using ImageUtils
-// Step 1: Crop to square (center crop)
                 val squareBitmap = run {
                     val width = bitmap.width
                     val height = bitmap.height
@@ -110,14 +108,13 @@ fun ChatScreen(
                     Bitmap.createBitmap(bitmap, xOffset, yOffset, size, size)
                 }
 
-// Step 2: Resize using your util
                 val resized = imageBitmapToAndroidBitmap(squareBitmap.asImageBitmap(), 1080, 1080)
 
                 val baos = ByteArrayOutputStream()
-                resized.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+                resized.compress(Bitmap.CompressFormat.WEBP_LOSSY, 80, baos)
                 val data = baos.toByteArray()
 
-                val filename = UUID.randomUUID().toString() + ".jpg"
+                val filename = UUID.randomUUID().toString() + ".webp"
                 val ref = FirebaseStorage.getInstance().reference
                     .child("chat_images/$chatId/$filename")
 

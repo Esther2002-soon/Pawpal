@@ -48,6 +48,7 @@ import java.util.Locale
 import com.example.pawpal.components.FilterFAB
 import java.util.Calendar
 import com.example.pawpal.utils.showDateTimePicker
+import com.example.pawpal.utils.isGpsEnabled
 
 @Composable
 fun MapScreen(navController: NavController) {
@@ -65,7 +66,8 @@ fun MapScreen(navController: NavController) {
     var pendingPetForOwnerCard by remember { mutableStateOf<Map<String, Any>?>(null) }
 
     val cameraPositionState = rememberCameraPositionState()
-    val now = System.currentTimeMillis()
+    val isGpsEnabled = isGpsEnabled(context)
+    var showGpsDialog by remember { mutableStateOf(!isGpsEnabled) }
     val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
     var userLocation by remember { mutableStateOf<Location?>(null) }
 
@@ -73,14 +75,13 @@ fun MapScreen(navController: NavController) {
     var keywordInput by remember { mutableStateOf("") }
     var filterStartCal by remember { mutableStateOf<Calendar?>(null) }
     var filterEndCal by remember { mutableStateOf<Calendar?>(null) }
-    var maxDistanceKm by remember { mutableStateOf(50f) }
+    var maxDistanceKm by remember { mutableStateOf(10000f) }
     var distanceInput by remember { mutableStateOf("50") }
     var showFilterDialog by remember { mutableStateOf(false) }
 
     val filterStartTime = filterStartCal?.let { dateFormat.format(it.time) } ?: ""
     val filterEndTime = filterEndCal?.let { dateFormat.format(it.time) } ?: ""
 
-    // Fetch user's location
     LaunchedEffect(Unit) {
         val location = getCurrentLocation(context)
         val latLng = LatLng(location?.latitude ?: 23.6978, location?.longitude ?: 120.9605)
@@ -89,8 +90,6 @@ fun MapScreen(navController: NavController) {
         cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
     }
 
-    // Fetch tasks
-    // Fetch tasks
     LaunchedEffect(Unit) {
         try {
             val allUsers = db.collection("users").get().await()
@@ -176,7 +175,7 @@ fun MapScreen(navController: NavController) {
                 properties = MapProperties(isMyLocationEnabled = true)
             ) {
                 filteredTasks.forEach { (task, pet) ->
-                val lat = task["lat"] as? Double ?: return@forEach
+                    val lat = task["lat"] as? Double ?: return@forEach
                     val lng = task["lng"] as? Double ?: return@forEach
 
                     val jitteredLat = lat + ((-0.0001..0.0001).random())
@@ -324,6 +323,18 @@ fun MapScreen(navController: NavController) {
                 "lat" to (pendingTaskForOwnerCard?.get("lat") ?: ""),
                 "lng" to (pendingTaskForOwnerCard?.get("lng") ?: "")
             )
+        )
+    }
+    if (showGpsDialog) {
+        AlertDialog(
+            onDismissRequest = {},
+            title = { Text("Location Disabled") },
+            text = { Text("Please enable GPS to access this feature.") },
+            confirmButton = {
+                TextButton(onClick = { showGpsDialog = false }) {
+                    Text("OK")
+                }
+            }
         )
     }
 }

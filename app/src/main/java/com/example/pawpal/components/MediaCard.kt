@@ -76,7 +76,7 @@ fun ProfilePicture(userId: String, onClick: (String) -> Unit) {
         val imageUrl = doc.getString("imageUrl")
         if (!imageUrl.isNullOrEmpty()) {
             val ref = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
-            val bytes = ref.getBytes(512 * 512).await()
+            val bytes = ref.getBytes(1024 * 1024).await()
             imageBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size).asImageBitmap()
         }
     }
@@ -126,7 +126,7 @@ fun MediaCard(
         val bitmaps = imageUrls.mapNotNull {
             try {
                 val ref = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                val bytes = ref.getBytes(512 * 1024).await()
+                val bytes = ref.getBytes(1024 * 1024).await()
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.size).asImageBitmap()
             } catch (_: Exception) { null }
         }
@@ -217,7 +217,6 @@ fun MediaCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // ✅ Group like icon + count together
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconToggleButton(
                         checked = isLiked,

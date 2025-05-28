@@ -1,4 +1,3 @@
-// components/SelectTask.kt
 package com.example.pawpal.components
 
 import android.graphics.BitmapFactory

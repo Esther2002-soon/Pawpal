@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,6 +59,7 @@ import androidx.compose.material3.Button
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
+import com.example.pawpal.utils.isGpsEnabled
 
 @Composable
 fun TaskSwipeScreen(navController: NavController) {
@@ -74,14 +78,15 @@ fun TaskSwipeScreen(navController: NavController) {
     val calendarFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
     var filterStartCal by remember { mutableStateOf<Calendar?>(null) }
     var filterEndCal by remember { mutableStateOf<Calendar?>(null) }
-    var maxDistanceKm by remember { mutableStateOf(50f) }
+    var maxDistanceKm by remember { mutableStateOf(10000f) }
     val filterStartTime = filterStartCal?.let { calendarFormat.format(it.time) } ?: ""
     val filterEndTime = filterEndCal?.let { calendarFormat.format(it.time) } ?: ""
     var showFilterDialog by remember { mutableStateOf(false) }
     var userLocation by remember { mutableStateOf<Location?>(null) }
-    var distanceInput by remember { mutableStateOf("50") } // default as string
+    var distanceInput by remember { mutableStateOf("50") }
+    val isGpsEnabled = isGpsEnabled(context)
+    var showGpsDialog by remember { mutableStateOf(!isGpsEnabled) }
 
-    // 🔄 Fetch all unexpired tasks
     LaunchedEffect(swipeSessionId) {
         val results = mutableListOf<Pair<Map<String, Any>, Map<String, Any>>>()
         val users = db.collection("users").get().await()
@@ -216,7 +221,6 @@ fun TaskSwipeScreen(navController: NavController) {
 
                                     val chatDoc = db.collection("chats").document(chatId)
                                     chatDoc.collection("messages").add(taskInfoMessage).await()
-                                    // ⛑️ ADD THIS BLOCK with try-catch for better debugging
                                     try {
                                         val senderRef = db.collection("users").document(currentUserId)
                                             .collection("chatRefs").document(chatId)
@@ -378,14 +382,24 @@ fun TaskSwipeScreen(navController: NavController) {
             )
         }
 
-        }
-
-
-            selectedTask?.let { (task, pet) ->
+    }
+    selectedTask?.let { (task, pet) ->
         SelectTaskDialog(
             task = task,
             pet = pet,
             onDismiss = { selectedTask = null }
+        )
+    }
+    if (showGpsDialog) {
+        AlertDialog(
+            onDismissRequest = {},
+            title = { Text("Location Disabled") },
+            text = { Text("Please enable GPS to access this feature.") },
+            confirmButton = {
+                TextButton(onClick = { showGpsDialog = false }) {
+                    Text("OK")
+                }
+            }
         )
     }
 }

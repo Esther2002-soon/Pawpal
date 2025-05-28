@@ -1,34 +1,20 @@
 package com.example.pawpal.utils
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Geocoder
 import android.location.Location
 import android.os.Looper
-import androidx.core.content.ContextCompat
-import com.google.android.gms.location.*
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.util.*
 import kotlin.coroutines.resume
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import java.util.Locale
-import com.google.android.gms.maps.model.*
-import com.google.maps.android.compose.*
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
-import com.google.android.libraries.places.api.model.RectangularBounds
+import android.location.LocationManager
+import android.graphics.Bitmap
 
-@SuppressLint("MissingPermission")
+import android.provider.Settings@SuppressLint("MissingPermission")
+
 suspend fun getCurrentLocation(context: Context): Location? {
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
@@ -53,9 +39,7 @@ suspend fun getCurrentLocation(context: Context): Location? {
         }
     }
 }
-
-fun getAddressFromCoordinates(context: Context, latitude: Double, longitude: Double): String? {
-    val geocoder = Geocoder(context, Locale.getDefault())
-    val addressList = geocoder.getFromLocation(latitude, longitude, 1)
-    return addressList?.firstOrNull()?.getAddressLine(0)
+fun isGpsEnabled(context: Context): Boolean {
+    val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 }

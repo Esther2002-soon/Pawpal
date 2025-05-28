@@ -35,8 +35,8 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun PawpalTheme(
-    darkTheme: Boolean = false, // always false
-    dynamicColor: Boolean = false, // disable dynamic color
+    darkTheme: Boolean = false,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ){
     val colorScheme = when {
