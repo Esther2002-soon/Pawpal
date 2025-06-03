@@ -430,7 +430,6 @@ fun TaskGallery(userId: String, pets: List<Map<String, Any>>) {
                         }
                     }
 
-                    // 🗺️ Google Map
                     val taiwanBounds = LatLngBounds(
                         LatLng(21.8, 119.3),  // Southwest corner
                         LatLng(25.4, 122.1)   // Northeast corner
@@ -459,7 +458,6 @@ fun TaskGallery(userId: String, pets: List<Map<String, Any>>) {
                         location = "Lat: ${latLng!!.latitude}, Lng: ${latLng!!.longitude}"
                     }
 
-                    // 🔍 Search box (on top of map)
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -482,7 +480,7 @@ fun TaskGallery(userId: String, pets: List<Map<String, Any>>) {
 
                                     val request = FindAutocompletePredictionsRequest.builder()
                                         .setQuery(searchQuery)
-                                        .setCountries(listOf("TW")) // 🇹🇼 Taiwan only
+                                        .setCountries(listOf("TW"))
                                         .build()
 
                                     placesClient.findAutocompletePredictions(request)

@@ -156,9 +156,9 @@ fun OwnerCard(
                     Text(text = bioText ?: "", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
 
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "Role: $roleText", color = Color(0xffc7621a))
-                    Text(text = "Gender: $genderText", color = Color(0xffc7621a))
-                    Text(text = "Location: $locationText", color = Color(0xffc7621a))
+                    Text(text = "Role: $roleText")
+                    Text(text = "Gender: $genderText")
+                    Text(text = "Location: $locationText")
 
                     Spacer(modifier = Modifier.height(8.dp))
                     RatingRow(userId = ownerId, centered = true)
