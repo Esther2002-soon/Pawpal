@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        Places.initialize(applicationContext, "AIzaSyAGdBcjlTx2MZXJxHapT_DWQ8JClv6d-C0")
+        Places.initialize(applicationContext, "AIzaSyAOlcfB-2SUrKshu8s6TjBpYvnlUJbjnTQ")
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
 
